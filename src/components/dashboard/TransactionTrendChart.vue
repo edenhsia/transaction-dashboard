@@ -25,6 +25,7 @@
     data: DailyTrend[]
   }>()
 
+  const documentStyle = getComputedStyle(document.documentElement)
   const chartData = computed<ChartData<'line'>>(function () {
     return {
       labels: props.data.map(function (item) {
@@ -36,12 +37,10 @@
           data: props.data.map(function (item) {
             return item.amount
           }),
-          borderColor: '#0d9488',
-          backgroundColor: 'rgba(13, 148, 136, 0.08)',
+          borderColor: documentStyle.getPropertyValue('--p-primary-500'),
           borderWidth: 2,
           tension: 0,
           pointHoverRadius: 5,
-          fill: true,
         },
       ],
     }
