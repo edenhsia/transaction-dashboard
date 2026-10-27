@@ -23,4 +23,15 @@ app.use(PrimeVue, {
 })
 app.use(ToastService)
 app.use(router)
-app.mount('#app')
+
+async function bootstrap() {
+  const { worker } = await import('@/mocks/browser')
+
+  await worker.start({
+    onUnhandledFrame: 'bypass',
+  })
+
+  app.mount('#app')
+}
+
+bootstrap()
