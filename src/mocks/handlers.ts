@@ -1,4 +1,5 @@
 import { http, HttpResponse } from 'msw/http'
+import { delay } from 'msw/utils/delay'
 import branches from '@/data/branches.json'
 import transactions from '@/data/transactions.json'
 
@@ -66,7 +67,9 @@ export const handlers = [
     })
   }),
 
-  http.get('/api/dashboard', function ({ request }) {
+  http.get('/api/dashboard', async function ({ request }) {
+    await delay(1000)
+
     const { searchParams } = new URL(request.url)
 
     const rawDays = Number(searchParams.get('days') ?? 7)
