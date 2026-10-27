@@ -2,18 +2,18 @@
   <div v-if="open" class="fixed inset-0 z-40 bg-black/40 md:hidden" @click="emit('close')" />
 
   <aside
-    class="fixed inset-y-0 left-0 z-50 flex w-60 flex-col border-r border-zinc-200 bg-white transition-transform duration-200 md:static md:translate-x-0"
+    class="fixed inset-y-0 left-0 z-50 flex w-65 flex-col border-r border-zinc-200 bg-white transition-transform duration-200 md:static md:translate-x-0"
     :class="open ? 'translate-x-0' : '-translate-x-full'"
   >
     <div class="flex h-18 items-center justify-between border-b border-zinc-100 px-5">
       <div class="flex items-center gap-3">
-        <div class="flex size-9 items-center justify-center rounded-lg bg-teal-600 text-white">
+        <div class="bg-primary-500 flex size-9 items-center justify-center rounded-lg text-white">
           <i class="pi pi-box text-lg" aria-hidden="true" />
         </div>
 
         <div class="flex flex-col">
-          <span class="text-sm font-semibold text-zinc-900">Admin Console</span>
-          <span class="text-xs text-zinc-500">Management system</span>
+          <span class="text-sm font-semibold text-zinc-900">Retail Lab</span>
+          <span class="text-xs text-zinc-500">Retail Management Demo</span>
         </div>
       </div>
 
@@ -38,7 +38,7 @@
           class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors"
           :class="
             isActive(item.path)
-              ? 'bg-teal-50 text-teal-700'
+              ? 'text-primary-700 bg-primary-50'
               : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900'
           "
           :aria-current="isActive(item.path) ? 'page' : undefined"
