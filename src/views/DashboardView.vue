@@ -18,22 +18,26 @@
       無法取得統計資料，請稍後再試。
     </PrimeMessage>
 
-    <div v-else class="grid grid-cols-1 gap-4 md:grid-cols-2">
-      <template v-if="isPending">
-        <KpiSkeletonCard v-for="i in 4" :key="i" />
-      </template>
+    <template v-else>
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <template v-if="isPending">
+          <KpiSkeletonCard v-for="i in 4" :key="i" />
+        </template>
 
-      <template v-else>
-        <KpiCard
-          v-for="item in summaryItems"
-          :key="item.label"
-          :label="item.label"
-          :value="item.value"
-          :description="item.description"
-          :icon="item.icon"
-        />
-      </template>
-    </div>
+        <template v-else>
+          <KpiCard
+            v-for="item in summaryItems"
+            :key="item.label"
+            :label="item.label"
+            :value="item.value"
+            :description="item.description"
+            :icon="item.icon"
+          />
+        </template>
+      </div>
+
+      <TransactionTrendChart v-if="data" :data="data.dailyTrend" />
+    </template>
   </section>
 </template>
 

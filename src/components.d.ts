@@ -15,11 +15,12 @@ declare module 'vue' {
     BaseSidebar: typeof import('./components/base/BaseSidebar.vue')['default']
     DashboardView: typeof import('./views/DashboardView.vue')['default']
     DemoView: typeof import('./views/DemoView.vue')['default']
-    KpiCard: typeof import('./components/KpiCard.vue')['default']
-    KpiSkeletonCard: typeof import('./components/KpiSkeletonCard.vue')['default']
-    PeriodSelector: typeof import('./components/PeriodSelector.vue')['default']
+    KpiCard: typeof import('./components/dashboard/KpiCard.vue')['default']
+    KpiSkeletonCard: typeof import('./components/dashboard/KpiSkeletonCard.vue')['default']
+    PeriodSelector: typeof import('./components/dashboard/PeriodSelector.vue')['default']
     PrimeButton: typeof import('primevue/button')['default']
     PrimeCard: typeof import('primevue/card')['default']
+    PrimeChart: typeof import('primevue/chart')['default']
     PrimeCheckbox: typeof import('primevue/checkbox')['default']
     PrimeDialog: typeof import('primevue/dialog')['default']
     PrimeDivider: typeof import('primevue/divider')['default']
@@ -35,5 +36,6 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     Sidebar: typeof import('./components/Sidebar.vue')['default']
     TransactionsView: typeof import('./views/TransactionsView.vue')['default']
+    TransactionTrendChart: typeof import('./components/dashboard/TransactionTrendChart.vue')['default']
   }
 }
