@@ -78,9 +78,10 @@
           display: false,
         },
         ticks: {
-          maxTicksLimit: 8,
-          maxRotation: 0,
           autoSkip: true,
+          maxTicksLimit: 8,
+          minRotation: 0,
+          maxRotation: 45,
           align: 'inner',
         },
       },
