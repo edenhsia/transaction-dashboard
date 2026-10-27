@@ -25,14 +25,7 @@
         </template>
 
         <template v-else>
-          <KpiCard
-            v-for="item in summaryItems"
-            :key="item.label"
-            :label="item.label"
-            :value="item.value"
-            :description="item.description"
-            :icon="item.icon"
-          />
+          <KpiCard v-for="item in summaryItems" :key="item.label" v-bind="item" />
         </template>
       </div>
 
