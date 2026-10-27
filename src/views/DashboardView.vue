@@ -29,11 +29,14 @@
         </template>
       </div>
 
-      <TransactionTrendChart v-if="data" :data="data.dailyTrend" />
+      <template v-if="data">
+        <TransactionTrendChart :data="data.dailyTrend" />
 
-      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <TransactionStatusChart v-if="data" :data="data.statusDistribution" />
-      </div>
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <TransactionStatusChart :data="data.statusDistribution" />
+          <BranchComparisonChart :data="data.branchComparison" />
+        </div>
+      </template>
     </template>
   </section>
 </template>

@@ -13,6 +13,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     BaseHeader: typeof import('./components/base/BaseHeader.vue')['default']
     BaseSidebar: typeof import('./components/base/BaseSidebar.vue')['default']
+    BranchComparisonChart: typeof import('./components/dashboard/BranchComparisonChart.vue')['default']
     DashboardView: typeof import('./views/DashboardView.vue')['default']
     KpiCard: typeof import('./components/dashboard/KpiCard.vue')['default']
     KpiSkeletonCard: typeof import('./components/dashboard/KpiSkeletonCard.vue')['default']

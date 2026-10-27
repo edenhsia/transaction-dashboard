@@ -30,7 +30,7 @@
   const documentStyle = getComputedStyle(document.documentElement)
 
   const statusConfig: Record<TransactionStatus, { label: string; color: string }> = {
-    success: { label: '成功', color: documentStyle.getPropertyValue('--p-teal-500') },
+    success: { label: '成功', color: documentStyle.getPropertyValue('--p-primary-500') },
     failed: { label: '失敗', color: documentStyle.getPropertyValue('--p-red-400') },
     pending: { label: '處理中', color: documentStyle.getPropertyValue('--p-amber-400') },
   }
