@@ -1,5 +1,11 @@
 <template>
   <section class="space-y-6">
+    <div class="flex flex-wrap items-center gap-2">
+      <PrimeTag value="DEMO" severity="secondary" />
+
+      <p class="text-muted-color text-xs">模擬交易資料・基準日 2026/10/27</p>
+    </div>
+
     <TransactionFilters @search="handleSearch" />
 
     <PrimeMessage v-if="isError" severity="error" :closable="false">
