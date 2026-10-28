@@ -15,7 +15,18 @@
     <PrimeDivider />
 
     <PrimeMessage v-if="isError" severity="error" :closable="false">
-      無法取得統計資料，請稍後再試。
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <span>無法取得統計資料，請稍後再試。</span>
+
+        <PrimeButton
+          label="重新取得"
+          icon="pi pi-refresh"
+          size="small"
+          severity="secondary"
+          outlined
+          @click="reloadPage"
+        />
+      </div>
     </PrimeMessage>
 
     <template v-else>
@@ -89,4 +100,8 @@
       },
     ]
   })
+
+  function reloadPage() {
+    window.location.reload()
+  }
 </script>

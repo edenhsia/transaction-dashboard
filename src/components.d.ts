@@ -18,6 +18,7 @@ declare module 'vue' {
     KpiCard: typeof import('./components/dashboard/KpiCard.vue')['default']
     KpiSkeletonCard: typeof import('./components/dashboard/KpiSkeletonCard.vue')['default']
     PeriodSelector: typeof import('./components/dashboard/PeriodSelector.vue')['default']
+    PrimeButton: typeof import('primevue/button')['default']
     PrimeCard: typeof import('primevue/card')['default']
     PrimeChart: typeof import('primevue/chart')['default']
     PrimeDivider: typeof import('primevue/divider')['default']
