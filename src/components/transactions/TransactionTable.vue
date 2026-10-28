@@ -1,5 +1,5 @@
 <template>
-  <PrimeCard class="shadow-none">
+  <PrimeCard>
     <template #title>
       <div class="flex items-center justify-between gap-3">
         <h2 class="text-lg font-medium">交易紀錄</h2>

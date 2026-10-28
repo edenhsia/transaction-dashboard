@@ -1,5 +1,5 @@
 <template>
-  <PrimeCard class="shadow-none">
+  <PrimeCard>
     <template #title>
       <h2 class="text-lg font-medium">交易條件篩選</h2>
     </template>

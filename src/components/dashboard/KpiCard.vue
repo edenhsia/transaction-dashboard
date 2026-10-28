@@ -1,5 +1,5 @@
 <template>
-  <PrimeCard class="h-full shadow-none">
+  <PrimeCard class="h-full">
     <template #content>
       <div class="flex items-start justify-between gap-4">
         <div class="flex flex-col gap-3">

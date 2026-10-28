@@ -28,4 +28,6 @@
   --p-primary-800: var(--color-primary-800);
   --p-primary-900: var(--color-primary-900);
   --p-primary-950: var(--color-primary-950);
+
+  --p-card-shadow: none;
 }

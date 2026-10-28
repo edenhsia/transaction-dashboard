@@ -1,5 +1,5 @@
 <template>
-  <PrimeCard class="shadow-none">
+  <PrimeCard>
     <template #content>
       <div class="flex flex-col gap-3">
         <PrimeSkeleton width="7rem" height="1rem" />

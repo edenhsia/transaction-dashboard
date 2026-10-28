@@ -1,5 +1,5 @@
 <template>
-  <PrimeCard class="h-full shadow-none">
+  <PrimeCard class="h-full">
     <template #title>
       <h2 class="text-lg font-medium">各分店交易金額</h2>
     </template>

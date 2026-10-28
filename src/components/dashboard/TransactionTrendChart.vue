@@ -1,5 +1,5 @@
 <template>
-  <PrimeCard class="shadow-none">
+  <PrimeCard>
     <template #title>
       <h2 class="text-lg font-medium">每日成功交易金額</h2>
     </template>
