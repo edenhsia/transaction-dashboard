@@ -55,6 +55,7 @@
 <script setup lang="ts">
   import { type DashboardDays } from '@/services/dashboard'
   import { useDashboard } from '@/composables/useDashboard'
+  import { reloadPage } from '@/utils'
 
   const days = ref<DashboardDays>(7)
 
@@ -100,8 +101,4 @@
       },
     ]
   })
-
-  function reloadPage() {
-    window.location.reload()
-  }
 </script>
