@@ -57,7 +57,7 @@
         <PrimeColumn header="交易金額" header-class="text-right">
           <template #body="{ data: item }">
             <div class="text-right font-medium">
-              {{ currencyFormatter.format(item.amount) }}
+              {{ formatMoney(item.amount) }}
             </div>
           </template>
         </PrimeColumn>
@@ -78,6 +78,7 @@
 <script setup lang="ts">
   import branches from '@/data/branches.json'
   import type { Transaction, TransactionStatus, PaymentMethod } from '@/services/transactions'
+  import { formatMoney } from '@/utils'
 
   defineProps<{
     data: Transaction[]
@@ -110,12 +111,6 @@
     credit_card: '信用卡',
     mobile_payment: '行動支付',
   }
-
-  const currencyFormatter = new Intl.NumberFormat('zh-TW', {
-    style: 'currency',
-    currency: 'TWD',
-    maximumFractionDigits: 0,
-  })
 
   const numberFormatter = new Intl.NumberFormat('zh-TW')
 

@@ -15,6 +15,7 @@
 <script setup lang="ts">
   import { computed } from 'vue'
   import type { ChartData, ChartOptions } from 'chart.js'
+  import { formatMoney } from '@/utils'
 
   type BranchComparison = {
     mid: string
@@ -27,12 +28,6 @@
   }>()
 
   const documentStyle = getComputedStyle(document.documentElement)
-
-  const currencyFormatter = new Intl.NumberFormat('zh-TW', {
-    style: 'currency',
-    currency: 'TWD',
-    maximumFractionDigits: 0,
-  })
 
   const chartData = computed<ChartData<'bar'>>(function () {
     return {
@@ -65,7 +60,7 @@
       tooltip: {
         callbacks: {
           label: function (context) {
-            return currencyFormatter.format(context.parsed.x ?? 0)
+            return formatMoney(context.parsed.x ?? 0)
           },
         },
       },

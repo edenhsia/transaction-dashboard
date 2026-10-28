@@ -15,6 +15,7 @@
 <script setup lang="ts">
   import { computed } from 'vue'
   import type { ChartData, ChartOptions } from 'chart.js'
+  import { formatMoney } from '@/utils'
 
   type DailyTrend = {
     date: string
@@ -46,12 +47,6 @@
     }
   })
 
-  const currencyFormatter = new Intl.NumberFormat('zh-TW', {
-    style: 'currency',
-    currency: 'TWD',
-    maximumFractionDigits: 0,
-  })
-
   const chartOptions: ChartOptions<'line'> = {
     responsive: true,
     maintainAspectRatio: true,
@@ -67,7 +62,7 @@
       tooltip: {
         callbacks: {
           label: function (context) {
-            return currencyFormatter.format(context.parsed.y ?? 0)
+            return formatMoney(context.parsed.y ?? 0)
           },
         },
       },

@@ -55,17 +55,11 @@
 <script setup lang="ts">
   import { type DashboardDays } from '@/services/dashboard'
   import { useDashboard } from '@/composables/useDashboard'
-  import { reloadPage } from '@/utils'
+  import { formatMoney, reloadPage } from '@/utils'
 
   const days = ref<DashboardDays>(7)
 
   const { data, isPending, isError } = useDashboard(days)
-
-  const currencyFormatter = new Intl.NumberFormat('zh-TW', {
-    style: 'currency',
-    currency: 'TWD',
-    maximumFractionDigits: 0,
-  })
 
   const numberFormatter = new Intl.NumberFormat('zh-TW')
 
@@ -77,7 +71,7 @@
     return [
       {
         label: '成功交易總額',
-        value: currencyFormatter.format(summary.totalAmount),
+        value: formatMoney(summary.totalAmount),
         description: '成功交易金額加總',
         icon: 'pi pi-wallet',
       },
@@ -95,7 +89,7 @@
       },
       {
         label: '平均交易金額',
-        value: currencyFormatter.format(summary.averageAmount),
+        value: formatMoney(summary.averageAmount),
         description: '每筆成功交易平均金額',
         icon: 'pi pi-chart-line',
       },
