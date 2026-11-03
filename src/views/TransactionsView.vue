@@ -30,7 +30,9 @@
       :page="page"
       :page-size="pageSize"
       :loading="isPending || isFetching"
+      :exporting="exporting"
       @page="handlePage"
+      @export="handleExport"
     />
   </section>
 </template>
@@ -40,6 +42,8 @@
   import type { TransactionQuery } from '@/services/transactions'
   import { useTransactions } from '@/composables/useTransactions'
   import { reloadPage } from '@/utils'
+  import { useToast } from 'primevue/usetoast'
+  import { exportTransactionsCsv } from '@/utils/exportTransactionsCsv'
 
   const router = useRouter()
   const route = useRoute()
@@ -98,5 +102,27 @@
         page: value === 1 ? undefined : String(value),
       },
     })
+  }
+
+  const toast = useToast()
+  const exporting = ref(false)
+
+  async function handleExport() {
+    if (exporting.value) return
+
+    exporting.value = true
+
+    try {
+      await exportTransactionsCsv(query.value)
+    } catch {
+      toast.add({
+        severity: 'error',
+        summary: '匯出失敗',
+        detail: '無法取得交易資料，請稍後再試。',
+        life: 3000,
+      })
+    } finally {
+      exporting.value = false
+    }
   }
 </script>

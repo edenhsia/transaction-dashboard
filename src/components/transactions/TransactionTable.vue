@@ -1,10 +1,22 @@
 <template>
   <PrimeCard>
     <template #title>
-      <div class="flex items-center justify-between gap-3">
-        <h2 class="text-lg font-medium">交易紀錄</h2>
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <h2 class="text-lg font-medium">交易紀錄</h2>
 
-        <span class="text-muted-color text-sm"> 共 {{ numberFormatter.format(total) }} 筆 </span>
+          <span class="text-muted-color text-sm"> 共 {{ numberFormatter.format(total) }} 筆 </span>
+        </div>
+
+        <PrimeButton
+          label="匯出 CSV"
+          icon="pi pi-download"
+          outlined
+          size="small"
+          :loading="exporting"
+          :disabled="total === 0 || loading"
+          @click="emit('export')"
+        />
       </div>
     </template>
 
@@ -76,7 +88,7 @@
 
 <script setup lang="ts">
   import branches from '@/data/branches.json'
-  import type { Transaction, TransactionStatus, PaymentMethod } from '@/services/transactions'
+  import type { Transaction, TransactionStatus } from '@/services/transactions'
   import { formatMoney } from '@/utils'
 
   defineProps<{
@@ -85,10 +97,12 @@
     page: number
     pageSize: number
     loading: boolean
+    exporting: boolean
   }>()
 
   const emit = defineEmits<{
     page: [page: number]
+    export: []
   }>()
 
   const branchMap: Record<string, string> = Object.fromEntries(

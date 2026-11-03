@@ -9,6 +9,8 @@
         <RouterView />
       </main>
     </div>
+
+    <PrimeToast />
   </div>
 </template>
 

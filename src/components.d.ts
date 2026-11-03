@@ -30,6 +30,7 @@ declare module 'vue' {
     PrimeSelect: typeof import('primevue/select')['default']
     PrimeSkeleton: typeof import('primevue/skeleton')['default']
     PrimeTag: typeof import('primevue/tag')['default']
+    PrimeToast: typeof import('primevue/toast')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TransactionDetailView: typeof import('./views/TransactionDetailView.vue')['default']
