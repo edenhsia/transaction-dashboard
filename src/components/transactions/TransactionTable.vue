@@ -87,7 +87,7 @@
 </template>
 
 <script setup lang="ts">
-  import branches from '@/data/branches.json'
+  import { branchMap, statusConfig } from '@/constants/transactions'
   import type { Transaction, TransactionStatus } from '@/services/transactions'
   import { formatMoney } from '@/utils'
 
@@ -104,21 +104,6 @@
     page: [page: number]
     export: []
   }>()
-
-  const branchMap: Record<string, string> = Object.fromEntries(
-    branches.map(function (branch) {
-      return [branch.mid, branch.name]
-    }),
-  )
-
-  const statusConfig: Record<
-    TransactionStatus,
-    { label: string; severity: 'success' | 'danger' | 'warn' }
-  > = {
-    success: { label: '成功', severity: 'success' },
-    failed: { label: '失敗', severity: 'danger' },
-    pending: { label: '處理中', severity: 'warn' },
-  }
 
   const numberFormatter = new Intl.NumberFormat('zh-TW')
 
