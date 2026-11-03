@@ -45,7 +45,7 @@
             <div class="space-y-1">
               <p class="text-muted-color text-sm">交易金額</p>
               <p class="text-primary text-2xl font-semibold">
-                {{ currencyFormatter.format(data.amount) }}
+                {{ formatMoney(data.amount) }}
               </p>
             </div>
 
@@ -94,11 +94,10 @@
 </template>
 
 <script setup lang="ts">
-  import { computed } from 'vue'
-  import { useRoute } from 'vue-router'
   import branches from '@/data/branches.json'
   import { useTransaction } from '@/composables/useTransactions'
   import type { PaymentMethod, TransactionStatus } from '@/services/transactions'
+  import { formatMoney } from '@/utils'
 
   const route = useRoute()
 
@@ -127,12 +126,6 @@
     credit_card: '信用卡',
     mobile_payment: '行動支付',
   }
-
-  const currencyFormatter = new Intl.NumberFormat('zh-TW', {
-    style: 'currency',
-    currency: 'TWD',
-    maximumFractionDigits: 0,
-  })
 
   function formatDateTime(value: string) {
     return value.replace('T', ' ').slice(0, 16)
