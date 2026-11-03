@@ -121,11 +121,13 @@
   }
 
   const router = useRouter()
+  const route = useRoute()
 
   function goToDetail(id: string) {
     router.push({
       name: 'transaction-detail',
       params: { id },
+      query: route.query,
     })
   }
 </script>

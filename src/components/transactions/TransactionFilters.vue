@@ -92,6 +92,10 @@
     search: [filters: TransactionFilterValues]
   }>()
 
+  const props = defineProps<{
+    initialFilters: TransactionFilterValues
+  }>()
+
   const filters = reactive({
     id: '',
     mid: null as string | null,
@@ -142,4 +146,39 @@
 
     handleSearch()
   }
+
+  function parseDate(value: string): Date | null {
+    if (!value) return null
+
+    const [year, month, day] = value.split('-').map(Number)
+    const date = new Date(year, month - 1, day)
+
+    if (
+      !year ||
+      !month ||
+      !day ||
+      date.getFullYear() !== year ||
+      date.getMonth() !== month - 1 ||
+      date.getDate() !== day
+    ) {
+      return null
+    }
+
+    return date
+  }
+
+  watch(
+    () => props.initialFilters,
+    (values) => {
+      filters.id = values.id
+      filters.mid = values.mid
+      filters.status = values.status
+
+      const start = parseDate(values.startDate)
+      const end = parseDate(values.endDate)
+
+      dateRange.value = start ? (end ? [start, end] : [start]) : null
+    },
+    { immediate: true },
+  )
 </script>

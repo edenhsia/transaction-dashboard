@@ -6,7 +6,7 @@
       <p class="text-muted-color text-xs">模擬交易資料・基準日 2026/10/27</p>
     </div>
 
-    <TransactionFilters @search="handleSearch" />
+    <TransactionFilters :initial-filters="filters" @search="handleSearch" />
 
     <PrimeMessage v-if="isError" severity="error" :closable="false">
       <div class="flex flex-wrap items-center justify-between gap-3">
@@ -41,18 +41,31 @@
   import { useTransactions } from '@/composables/useTransactions'
   import { reloadPage } from '@/utils'
 
-  const page = ref(1)
+  const router = useRouter()
+  const route = useRoute()
   const pageSize = 10
 
-  const filters = ref<TransactionFilterValues>({
-    id: '',
-    mid: null,
-    status: null,
-    startDate: '',
-    endDate: '',
+  function getQueryString(value: unknown): string {
+    return typeof value === 'string' ? value : ''
+  }
+
+  const filters = computed<TransactionFilterValues>(() => {
+    return {
+      id: getQueryString(route.query.id),
+      mid: getQueryString(route.query.mid) || null,
+      status: getQueryString(route.query.status) || null,
+      startDate: getQueryString(route.query.startDate),
+      endDate: getQueryString(route.query.endDate),
+    }
   })
 
-  const query = computed<TransactionQuery>(function () {
+  const page = computed(() => {
+    const value = Number(route.query.page)
+
+    return Number.isSafeInteger(value) && value > 0 ? value : 1
+  })
+
+  const query = computed<TransactionQuery>(() => {
     return {
       page: page.value,
       pageSize,
@@ -67,11 +80,23 @@
   const { data, isPending, isFetching, isError } = useTransactions(query)
 
   function handleSearch(values: TransactionFilterValues) {
-    page.value = 1
-    filters.value = values
+    router.push({
+      query: {
+        id: values.id || undefined,
+        mid: values.mid || undefined,
+        status: values.status || undefined,
+        startDate: values.startDate || undefined,
+        endDate: values.endDate || undefined,
+      },
+    })
   }
 
   function handlePage(value: number) {
-    page.value = value
+    router.push({
+      query: {
+        ...route.query,
+        page: value === 1 ? undefined : String(value),
+      },
+    })
   }
 </script>

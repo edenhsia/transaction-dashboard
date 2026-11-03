@@ -1,7 +1,7 @@
 <template>
   <section class="space-y-6">
     <RouterLink
-      to="/transactions"
+      :to="{ path: '/transactions', query: route.query }"
       class="text-muted-color hover:text-primary inline-flex items-center gap-2 text-sm transition-colors"
     >
       <i class="pi pi-arrow-left" />
