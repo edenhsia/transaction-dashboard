@@ -32,6 +32,7 @@ declare module 'vue' {
     PrimeTag: typeof import('primevue/tag')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    TransactionDetailView: typeof import('./views/TransactionDetailView.vue')['default']
     TransactionFilters: typeof import('./components/transactions/TransactionFilters.vue')['default']
     TransactionStatusChart: typeof import('./components/dashboard/TransactionStatusChart.vue')['default']
     TransactionsView: typeof import('./views/TransactionsView.vue')['default']

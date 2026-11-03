@@ -47,3 +47,19 @@ export async function getTransactions(query: TransactionQuery): Promise<Transact
 
   return response.json()
 }
+
+export type TransactionDetailResponse = {
+  data: Transaction
+}
+
+export async function getTransaction(id: string): Promise<Transaction> {
+  const response = await fetch(`/api/transactions/${encodeURIComponent(id)}`)
+
+  if (!response.ok) {
+    throw new Error('無法取得交易詳細資料')
+  }
+
+  const result: TransactionDetailResponse = await response.json()
+
+  return result.data
+}

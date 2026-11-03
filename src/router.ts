@@ -23,6 +23,14 @@ const router = createRouter({
           component: () => import('@/views/TransactionsView.vue'),
           meta: { title: '交易查詢' },
         },
+        {
+          path: 'transactions/:id',
+          name: 'transaction-detail',
+          component: () => import('@/views/TransactionDetailView.vue'),
+          meta: {
+            title: '交易明細',
+          },
+        },
       ],
     },
     {

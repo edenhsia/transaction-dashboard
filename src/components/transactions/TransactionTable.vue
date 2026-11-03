@@ -39,21 +39,6 @@
           </template>
         </PrimeColumn>
 
-        <PrimeColumn header="MID / TID">
-          <template #body="{ data: item }">
-            <div class="flex flex-col gap-1">
-              <span>{{ item.mid }}</span>
-              <span class="text-muted-color text-xs">{{ item.tid }}</span>
-            </div>
-          </template>
-        </PrimeColumn>
-
-        <PrimeColumn header="付款方式">
-          <template #body="{ data: item }">
-            {{ getPaymentLabel(item.paymentMethod) }}
-          </template>
-        </PrimeColumn>
-
         <PrimeColumn header="交易金額" header-class="text-right">
           <template #body="{ data: item }">
             <div class="text-right font-medium">
@@ -67,6 +52,20 @@
             <PrimeTag
               :value="getStatusConfig(item.status).label"
               :severity="getStatusConfig(item.status).severity"
+            />
+          </template>
+        </PrimeColumn>
+
+        <PrimeColumn header="操作">
+          <template #body="{ data: item }">
+            <PrimeButton
+              label="詳情"
+              icon="pi pi-chevron-circle-right"
+              size="small"
+              severity="secondary"
+              icon-pos="right"
+              text
+              @click="goToDetail(item.id)"
             />
           </template>
         </PrimeColumn>
@@ -107,19 +106,10 @@
     pending: { label: '處理中', severity: 'warn' },
   }
 
-  const paymentLabels: Record<PaymentMethod, string> = {
-    credit_card: '信用卡',
-    mobile_payment: '行動支付',
-  }
-
   const numberFormatter = new Intl.NumberFormat('zh-TW')
 
   function formatDateTime(value: string) {
     return value.replace('T', ' ').slice(0, 16)
-  }
-
-  function getPaymentLabel(method: PaymentMethod) {
-    return paymentLabels[method]
   }
 
   function getStatusConfig(status: TransactionStatus) {
@@ -128,5 +118,14 @@
 
   function handlePage(event: { page: number }) {
     emit('page', event.page + 1)
+  }
+
+  const router = useRouter()
+
+  function goToDetail(id: string) {
+    router.push({
+      name: 'transaction-detail',
+      params: { id },
+    })
   }
 </script>
