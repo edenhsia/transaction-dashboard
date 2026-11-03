@@ -31,6 +31,12 @@ const router = createRouter({
             title: '交易明細',
           },
         },
+        {
+          path: '/devices',
+          name: 'devices',
+          component: () => import('@/views/DevicesView.vue'),
+          meta: { title: '設備管理' },
+        },
       ],
     },
     {

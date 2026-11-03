@@ -2,6 +2,42 @@ import { http, HttpResponse } from 'msw/http'
 import { delay } from 'msw/utils/delay'
 import branches from '@/data/branches.json'
 import transactions from '@/data/transactions.json'
+import devices from '@/data/devices.json'
+import type { Device } from '@/services/devices'
+
+const STORAGE_KEY = 'retail-lab-devices'
+
+function getDevices(): Device[] {
+  const stored = localStorage.getItem(STORAGE_KEY)
+
+  if (!stored) return devices
+
+  try {
+    const parsed: unknown = JSON.parse(stored)
+
+    if (
+      !Array.isArray(parsed) ||
+      parsed.length !== devices.length ||
+      !parsed.every(function (item) {
+        return (
+          item !== null &&
+          typeof item === 'object' &&
+          typeof item.mid === 'string' &&
+          typeof item.tid === 'string' &&
+          typeof item.enabled === 'boolean'
+        )
+      })
+    ) {
+      localStorage.removeItem(STORAGE_KEY)
+      return devices
+    }
+
+    return parsed as Device[]
+  } catch {
+    localStorage.removeItem(STORAGE_KEY)
+    return devices
+  }
+}
 
 export const handlers = [
   http.get('/api/transactions', function ({ request }) {
@@ -176,6 +212,58 @@ export const handlers = [
       dailyTrend,
       statusDistribution,
       branchComparison,
+    })
+  }),
+
+  http.get('/api/devices', function () {
+    return HttpResponse.json({
+      data: getDevices(),
+    })
+  }),
+
+  http.patch('/api/devices/:mid/:tid', async function ({ params, request }) {
+    const { mid, tid } = params
+    const body: unknown = await request.json()
+
+    if (
+      typeof mid !== 'string' ||
+      typeof tid !== 'string' ||
+      !body ||
+      typeof body !== 'object' ||
+      !('enabled' in body) ||
+      typeof body.enabled !== 'boolean'
+    ) {
+      return HttpResponse.json({ message: '無效的設備設定' }, { status: 400 })
+    }
+
+    const current = getDevices()
+
+    const device = current.find(function (item) {
+      return item.mid === mid && item.tid === tid
+    })
+
+    if (!device) {
+      return HttpResponse.json({ message: '找不到設備' }, { status: 404 })
+    }
+
+    const updated = current.map(function (item) {
+      if (item.mid === mid && item.tid === tid) {
+        return {
+          ...item,
+          enabled: body.enabled,
+        }
+      }
+
+      return item
+    })
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
+
+    return HttpResponse.json({
+      data: {
+        ...device,
+        enabled: body.enabled,
+      },
     })
   }),
 ]

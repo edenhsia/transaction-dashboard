@@ -15,6 +15,7 @@ declare module 'vue' {
     BaseSidebar: typeof import('./components/base/BaseSidebar.vue')['default']
     BranchComparisonChart: typeof import('./components/dashboard/BranchComparisonChart.vue')['default']
     DashboardView: typeof import('./views/DashboardView.vue')['default']
+    DevicesView: typeof import('./views/DevicesView.vue')['default']
     KpiCard: typeof import('./components/dashboard/KpiCard.vue')['default']
     KpiSkeletonCard: typeof import('./components/dashboard/KpiSkeletonCard.vue')['default']
     PeriodSelector: typeof import('./components/dashboard/PeriodSelector.vue')['default']

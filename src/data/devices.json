@@ -1,0 +1,82 @@
+[
+  {
+    "mid": "M100003",
+    "tid": "T000006",
+    "enabled": false
+  },
+  {
+    "mid": "M100003",
+    "tid": "T000005",
+    "enabled": true
+  },
+  {
+    "mid": "M100001",
+    "tid": "T000001",
+    "enabled": true
+  },
+  {
+    "mid": "M100004",
+    "tid": "T000007",
+    "enabled": true
+  },
+  {
+    "mid": "M100002",
+    "tid": "T000003",
+    "enabled": true
+  },
+  {
+    "mid": "M100007",
+    "tid": "T000013",
+    "enabled": true
+  },
+  {
+    "mid": "M100004",
+    "tid": "T000008",
+    "enabled": true
+  },
+  {
+    "mid": "M100007",
+    "tid": "T000014",
+    "enabled": true
+  },
+  {
+    "mid": "M100006",
+    "tid": "T000011",
+    "enabled": true
+  },
+  {
+    "mid": "M100008",
+    "tid": "T000016",
+    "enabled": true
+  },
+  {
+    "mid": "M100001",
+    "tid": "T000002",
+    "enabled": true
+  },
+  {
+    "mid": "M100002",
+    "tid": "T000004",
+    "enabled": true
+  },
+  {
+    "mid": "M100005",
+    "tid": "T000010",
+    "enabled": true
+  },
+  {
+    "mid": "M100008",
+    "tid": "T000015",
+    "enabled": true
+  },
+  {
+    "mid": "M100005",
+    "tid": "T000009",
+    "enabled": true
+  },
+  {
+    "mid": "M100006",
+    "tid": "T000012",
+    "enabled": true
+  }
+]

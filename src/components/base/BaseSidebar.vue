@@ -78,6 +78,11 @@
       path: '/transactions',
       icon: 'pi pi-receipt',
     },
+    {
+      label: '設備管理',
+      path: '/devices',
+      icon: 'pi pi-desktop',
+    },
   ]
 
   function isActive(path: string) {
