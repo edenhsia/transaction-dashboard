@@ -4,8 +4,37 @@ import branches from '@/data/branches.json'
 import transactions from '@/data/transactions.json'
 import devices from '@/data/devices.json'
 import type { Device } from '@/services/devices'
+import type { DashboardSummary } from '@/services/dashboard'
 
 const STORAGE_KEY = 'retail-lab-devices'
+
+function createDashboardSummary(items: Array<{ amount: number; status: string }>): DashboardSummary {
+  const successful = items.filter(function (transaction) {
+    return transaction.status === 'success'
+  })
+
+  const totalAmount = successful.reduce(function (sum, transaction) {
+    return sum + transaction.amount
+  }, 0)
+
+  const totalTransactions = items.length
+  const successCount = successful.length
+
+  return {
+    totalAmount,
+    totalTransactions,
+    successRate: totalTransactions
+      ? Number(((successCount / totalTransactions) * 100).toFixed(2))
+      : 0,
+    averageAmount: successCount ? Math.round(totalAmount / successCount) : 0,
+  }
+}
+
+function getChangeRate(current: number, previous: number): number | null {
+  if (previous === 0) return current === 0 ? 0 : null
+
+  return Number((((current - previous) / previous) * 100).toFixed(1))
+}
 
 function getDevices(): Device[] {
   const stored = localStorage.getItem(STORAGE_KEY)
@@ -133,24 +162,40 @@ export const handlers = [
       return date >= startDate && date <= endDate
     })
 
+    const previousEnd = new Date(start)
+    previousEnd.setUTCDate(previousEnd.getUTCDate() - 1)
+
+    const previousStart = new Date(previousEnd)
+    previousStart.setUTCDate(previousStart.getUTCDate() - (days - 1))
+
+    const previousStartDate = previousStart.toISOString().slice(0, 10)
+    const previousEndDate = previousEnd.toISOString().slice(0, 10)
+
+    const previousFiltered = transactions.filter(function (transaction) {
+      const date = transaction.createdAt.slice(0, 10)
+      return date >= previousStartDate && date <= previousEndDate
+    })
+
     const successful = filtered.filter(function (transaction) {
       return transaction.status === 'success'
     })
 
-    const totalAmount = successful.reduce(function (sum, transaction) {
-      return sum + transaction.amount
-    }, 0)
+    const summary = createDashboardSummary(filtered)
+    const previousSummary = createDashboardSummary(previousFiltered)
 
-    const totalTransactions = filtered.length
-    const successCount = successful.length
-
-    const summary = {
-      totalAmount,
-      totalTransactions,
-      successRate: totalTransactions
-        ? Number(((successCount / totalTransactions) * 100).toFixed(2))
-        : 0,
-      averageAmount: successCount ? Math.round(totalAmount / successCount) : 0,
+    const comparison = {
+      totalAmountChangeRate: getChangeRate(summary.totalAmount, previousSummary.totalAmount),
+      totalTransactionsChangeRate: getChangeRate(
+        summary.totalTransactions,
+        previousSummary.totalTransactions,
+      ),
+      successRateChangePoints: Number(
+        (summary.successRate - previousSummary.successRate).toFixed(1),
+      ),
+      averageAmountChangeRate: getChangeRate(
+        summary.averageAmount,
+        previousSummary.averageAmount,
+      ),
     }
 
     const dailyMap = new Map<string, number>()
@@ -209,6 +254,7 @@ export const handlers = [
         endDate,
       },
       summary,
+      comparison,
       dailyTrend,
       statusDistribution,
       branchComparison,

@@ -11,6 +11,14 @@
             {{ value }}
           </p>
 
+          <div class="flex items-center gap-1.5 text-xs">
+            <span class="text-muted-color">較前 {{ comparisonDays }} 天</span>
+            <span class="inline-flex items-center gap-1 font-medium" :class="comparisonClass">
+              <i :class="comparisonIcon" aria-hidden="true" />
+              {{ comparison }}
+            </span>
+          </div>
+
           <p class="text-muted-color text-xs">
             {{ description }}
           </p>
@@ -27,10 +35,29 @@
 </template>
 
 <script setup lang="ts">
-  defineProps<{
+  const props = defineProps<{
     label: string
     value: string
     description: string
     icon: string
+    comparison: string
+    comparisonDays: number
+    comparisonDirection: 'up' | 'down' | 'neutral'
+    comparisonTone: 'positive' | 'negative' | 'neutral'
   }>()
+
+  const comparisonClass = computed(() => {
+    return {
+      'text-green-600': props.comparisonTone === 'positive',
+      'text-red-600': props.comparisonTone === 'negative',
+      'text-muted-color': props.comparisonTone === 'neutral',
+    }
+  })
+
+  const comparisonIcon = computed(() => {
+    if (props.comparisonDirection === 'up') return 'pi pi-arrow-up text-xs'
+    if (props.comparisonDirection === 'down') return 'pi pi-arrow-down text-xs'
+
+    return 'pi pi-minus text-xs'
+  })
 </script>

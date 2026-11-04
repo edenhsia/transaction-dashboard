@@ -23,7 +23,12 @@
         </template>
 
         <template v-else>
-          <KpiCard v-for="item in summaryItems" :key="item.label" v-bind="item" />
+          <KpiCard
+            v-for="item in summaryItems"
+            :key="item.label"
+            v-bind="item"
+            :comparison-days="days"
+          />
         </template>
       </div>
 
@@ -44,16 +49,53 @@
   import { useDashboard } from '@/composables/useDashboard'
   import { formatMoney } from '@/utils'
 
+  type ComparisonDirection = 'up' | 'down' | 'neutral'
+  type ComparisonTone = 'positive' | 'negative' | 'neutral'
+
+  type SummaryItem = {
+    label: string
+    value: string
+    description: string
+    icon: string
+    comparison: string
+    comparisonDirection: ComparisonDirection
+    comparisonTone: ComparisonTone
+  }
+
   const days = ref<DashboardDays>(7)
 
   const { data, isPending, isError } = useDashboard(days)
 
   const numberFormatter = new Intl.NumberFormat('zh-TW')
 
-  const summaryItems = computed(function () {
-    const summary = data.value?.summary
+  function getDirection(value: number | null): ComparisonDirection {
+    if (value === null || value === 0) return 'neutral'
+    return value > 0 ? 'up' : 'down'
+  }
 
-    if (!summary) return []
+  function getTone(value: number | null): ComparisonTone {
+    if (value === null || value === 0) return 'neutral'
+    return value > 0 ? 'positive' : 'negative'
+  }
+
+  function formatChangeRate(value: number | null) {
+    if (value === null) return '前期無資料'
+    if (value === 0) return '持平'
+
+    return `${Math.abs(value).toFixed(1)}%`
+  }
+
+  function formatChangePoints(value: number) {
+    if (value === 0) return '持平'
+
+    return `${Math.abs(value).toFixed(1)} 個百分點`
+  }
+
+  const summaryItems = computed<SummaryItem[]>(function () {
+    const summary = data.value?.summary
+    const comparison = data.value?.comparison
+
+    if (!summary || !comparison) return []
 
     return [
       {
@@ -61,24 +103,36 @@
         value: formatMoney(summary.totalAmount),
         description: '成功交易金額加總',
         icon: 'pi pi-wallet',
+        comparison: formatChangeRate(comparison.totalAmountChangeRate),
+        comparisonDirection: getDirection(comparison.totalAmountChangeRate),
+        comparisonTone: getTone(comparison.totalAmountChangeRate),
       },
       {
         label: '總交易筆數',
         value: numberFormatter.format(summary.totalTransactions),
         description: '包含所有交易狀態',
         icon: 'pi pi-receipt',
+        comparison: formatChangeRate(comparison.totalTransactionsChangeRate),
+        comparisonDirection: getDirection(comparison.totalTransactionsChangeRate),
+        comparisonTone: getTone(comparison.totalTransactionsChangeRate),
       },
       {
         label: '交易成功率',
         value: `${summary.successRate.toFixed(2)}%`,
         description: '成功交易筆數占比',
         icon: 'pi pi-check-circle',
+        comparison: formatChangePoints(comparison.successRateChangePoints),
+        comparisonDirection: getDirection(comparison.successRateChangePoints),
+        comparisonTone: getTone(comparison.successRateChangePoints),
       },
       {
         label: '平均交易金額',
         value: formatMoney(summary.averageAmount),
         description: '每筆成功交易平均金額',
         icon: 'pi pi-chart-line',
+        comparison: formatChangeRate(comparison.averageAmountChangeRate),
+        comparisonDirection: getDirection(comparison.averageAmountChangeRate),
+        comparisonTone: getTone(comparison.averageAmountChangeRate),
       },
     ]
   })
