@@ -17,6 +17,7 @@
     <ErrorMessage v-if="isError" message="無法取得統計資料，請稍後再試。" />
 
     <template v-else>
+      <OperationalInsights v-if="data" :items="data.insights" />
       <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
         <template v-if="isPending">
           <KpiSkeletonCard v-for="i in 4" :key="i" />

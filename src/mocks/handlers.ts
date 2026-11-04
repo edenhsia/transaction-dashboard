@@ -4,7 +4,11 @@ import branches from '@/data/branches.json'
 import transactions from '@/data/transactions.json'
 import devices from '@/data/devices.json'
 import type { Device } from '@/services/devices'
-import type { DashboardSummary } from '@/services/dashboard'
+import type {
+  DashboardComparison,
+  DashboardInsight,
+  DashboardSummary,
+} from '@/services/dashboard'
 
 const STORAGE_KEY = 'retail-lab-devices'
 
@@ -34,6 +38,115 @@ function getChangeRate(current: number, previous: number): number | null {
   if (previous === 0) return current === 0 ? 0 : null
 
   return Number((((current - previous) / previous) * 100).toFixed(1))
+}
+
+function createDashboardInsights(
+  days: number,
+  startDate: string,
+  endDate: string,
+  summary: DashboardSummary,
+  comparison: DashboardComparison,
+  items: Array<{ mid: string; status: string }>,
+): DashboardInsight[] {
+  const insights: DashboardInsight[] = []
+  const amountChange = comparison.totalAmountChangeRate
+
+  if (amountChange === null) {
+    insights.push({
+      id: 'total-amount',
+      severity: 'info',
+      title: '前期無交易金額可供比較',
+      description: `目前顯示近 ${days} 天的成功交易總額。`,
+    })
+  } else if (amountChange === 0) {
+    insights.push({
+      id: 'total-amount',
+      severity: 'info',
+      title: '成功交易總額與前期持平',
+      description: `近 ${days} 天的成功交易總額沒有明顯變化。`,
+    })
+  } else {
+    insights.push({
+      id: 'total-amount',
+      severity: amountChange > 0 ? 'success' : 'warn',
+      title: `成功交易總額較前 ${days} 天${amountChange > 0 ? '成長' : '下降'} ${Math.abs(amountChange).toFixed(1)}%`,
+      description: amountChange > 0 ? '整體交易金額呈現成長。' : '建議持續觀察交易量與客單價。',
+    })
+  }
+
+  const successRateChange = comparison.successRateChangePoints
+
+  insights.push({
+    id: 'success-rate',
+    severity: successRateChange > 0 ? 'success' : successRateChange < 0 ? 'warn' : 'info',
+    title:
+      successRateChange === 0
+        ? '交易成功率與前期持平'
+        : `交易成功率較前 ${days} 天${successRateChange > 0 ? '上升' : '下降'} ${Math.abs(successRateChange).toFixed(1)} 個百分點`,
+    description:
+      successRateChange < 0 ? '建議檢查失敗交易與設備狀態。' : '目前交易成功率維持穩定。',
+    action:
+      successRateChange < 0
+        ? {
+            label: '查看失敗交易',
+            query: {
+              status: 'failed',
+              startDate,
+              endDate,
+            },
+          }
+        : undefined,
+  })
+
+  const branchRates = branches
+    .map(function (branch) {
+      const branchItems = items.filter(function (item) {
+        return item.mid === branch.mid
+      })
+      const successCount = branchItems.filter(function (item) {
+        return item.status === 'success'
+      }).length
+
+      return {
+        mid: branch.mid,
+        name: branch.name,
+        total: branchItems.length,
+        successRate: branchItems.length ? (successCount / branchItems.length) * 100 : 0,
+      }
+    })
+    .filter(function (branch) {
+      return branch.total >= 5
+    })
+    .sort(function (a, b) {
+      return a.successRate - b.successRate
+    })
+
+  const lowestBranch = branchRates[0]
+
+  if (lowestBranch) {
+    const gap = Number((summary.successRate - lowestBranch.successRate).toFixed(1))
+
+    insights.push({
+      id: 'branch-success-rate',
+      severity: gap >= 3 ? 'warn' : 'info',
+      title: `${lowestBranch.name}成功率最低，為 ${lowestBranch.successRate.toFixed(1)}%`,
+      description:
+        gap > 0
+          ? `低於整體成功率 ${gap.toFixed(1)} 個百分點。`
+          : '各分店成功率表現接近整體水準。',
+      action: {
+        label: '查看分店失敗交易',
+        query: {
+          mid: lowestBranch.mid,
+          status: 'failed',
+          startDate,
+          endDate,
+        },
+      },
+    })
+  }
+
+  return insights.slice(0, 3)
 }
 
 function getDevices(): Device[] {
@@ -247,6 +360,15 @@ export const handlers = [
         return b.amount - a.amount
       })
 
+    const insights = createDashboardInsights(
+      days,
+      startDate,
+      endDate,
+      summary,
+      comparison,
+      filtered,
+    )
+
     return HttpResponse.json({
       period: {
         days,
@@ -255,6 +377,7 @@ export const handlers = [
       },
       summary,
       comparison,
+      insights,
       dailyTrend,
       statusDistribution,
       branchComparison,

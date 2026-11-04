@@ -19,6 +19,7 @@ declare module 'vue' {
     ErrorMessage: typeof import('./components/base/ErrorMessage.vue')['default']
     KpiCard: typeof import('./components/dashboard/KpiCard.vue')['default']
     KpiSkeletonCard: typeof import('./components/dashboard/KpiSkeletonCard.vue')['default']
+    OperationalInsights: typeof import('./components/dashboard/OperationalInsights.vue')['default']
     PeriodSelector: typeof import('./components/dashboard/PeriodSelector.vue')['default']
     PrimeButton: typeof import('primevue/button')['default']
     PrimeCard: typeof import('primevue/card')['default']

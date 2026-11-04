@@ -14,6 +14,22 @@ export type DashboardComparison = {
   averageAmountChangeRate: number | null
 }
 
+export type DashboardInsight = {
+  id: string
+  severity: 'success' | 'warn' | 'info'
+  title: string
+  description: string
+  action?: {
+    label: string
+    query: {
+      mid?: string
+      status?: 'failed'
+      startDate: string
+      endDate: string
+    }
+  }
+}
+
 export type DashboardResponse = {
   period: {
     days: DashboardDays
@@ -22,6 +38,7 @@ export type DashboardResponse = {
   }
   summary: DashboardSummary
   comparison: DashboardComparison
+  insights: DashboardInsight[]
   dailyTrend: Array<{ date: string; amount: number }>
   statusDistribution: Array<{
     status: 'success' | 'failed' | 'pending'
