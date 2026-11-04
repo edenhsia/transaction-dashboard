@@ -62,13 +62,13 @@
   const toast = useToast()
   const confirm = useConfirm()
 
-  const { data, isPending, isError } = useDevices()
+  const { data: devices, isPending, isError } = useDevices()
   const { mutateAsync, isPending: isUpdatingDevice } = useUpdateDevice()
 
   const updatingDevice = ref<string | null>(null)
 
   const deviceList = computed(function () {
-    return data.value?.data ?? []
+    return devices.value?.data ?? []
   })
 
   function isUpdating(device: Device) {
