@@ -8,20 +8,7 @@
 
     <TransactionFilters :initial-filters="filters" @search="handleSearch" />
 
-    <PrimeMessage v-if="isError" severity="error" :closable="false">
-      <div class="flex flex-wrap items-center justify-between gap-3">
-        <span>無法取得統計資料，請稍後再試。</span>
-
-        <PrimeButton
-          label="重新取得"
-          icon="pi pi-refresh"
-          size="small"
-          severity="secondary"
-          outlined
-          @click="reloadPage"
-        />
-      </div>
-    </PrimeMessage>
+    <ErrorMessage v-if="isError" message="無法取得交易資料，請稍後再試。" />
 
     <TransactionTable
       v-else
@@ -41,7 +28,6 @@
   import type { TransactionFilterValues } from '@/components/transactions/TransactionFilters.vue'
   import type { TransactionQuery } from '@/services/transactions'
   import { useTransactions } from '@/composables/useTransactions'
-  import { reloadPage } from '@/utils'
   import { useToast } from 'primevue/usetoast'
   import { exportTransactionsCsv } from '@/utils/exportTransactionsCsv'
 

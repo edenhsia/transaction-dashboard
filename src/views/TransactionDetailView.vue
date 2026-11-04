@@ -8,9 +8,7 @@
       返回交易列表
     </RouterLink>
 
-    <PrimeMessage v-if="isError" severity="error" :closable="false">
-      無法取得交易詳細資料，請稍後再試。
-    </PrimeMessage>
+    <ErrorMessage v-if="isError" message="無法取得交易詳細資料，請稍後再試。" />
 
     <template v-else-if="isPending">
       <PrimeCard class="shadow-none">

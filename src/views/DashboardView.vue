@@ -14,20 +14,7 @@
 
     <PrimeDivider />
 
-    <PrimeMessage v-if="isError" severity="error" :closable="false">
-      <div class="flex flex-wrap items-center justify-between gap-3">
-        <span>無法取得統計資料，請稍後再試。</span>
-
-        <PrimeButton
-          label="重新取得"
-          icon="pi pi-refresh"
-          size="small"
-          severity="secondary"
-          outlined
-          @click="reloadPage"
-        />
-      </div>
-    </PrimeMessage>
+    <ErrorMessage v-if="isError" message="無法取得統計資料，請稍後再試。" />
 
     <template v-else>
       <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -55,7 +42,7 @@
 <script setup lang="ts">
   import { type DashboardDays } from '@/services/dashboard'
   import { useDashboard } from '@/composables/useDashboard'
-  import { formatMoney, reloadPage } from '@/utils'
+  import { formatMoney } from '@/utils'
 
   const days = ref<DashboardDays>(7)
 

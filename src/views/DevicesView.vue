@@ -5,9 +5,7 @@
       <PrimeTag value="DEMO" severity="secondary" />
     </div>
 
-    <PrimeMessage v-if="isError" severity="error">
-      無法取得設備資料，請重新整理頁面。
-    </PrimeMessage>
+    <ErrorMessage v-if="isError" message="無法取得設備資料，請重新整理頁面。" />
 
     <PrimeCard v-else>
       <template #title>設備列表</template>
