@@ -55,12 +55,14 @@
 </template>
 
 <script setup lang="ts">
+  import { useConfirm } from 'primevue/useconfirm'
   import { useToast } from 'primevue/usetoast'
   import { branchMap } from '@/constants/transactions'
   import { useDevices, useUpdateDevice } from '@/composables/useDevices'
   import type { Device } from '@/services/devices'
 
   const toast = useToast()
+  const confirm = useConfirm()
 
   const { data, isPending, isError } = useDevices()
   const { mutateAsync, isPending: isUpdatingDevice } = useUpdateDevice()
@@ -75,7 +77,32 @@
     return updatingDevice.value === `${device.mid}:${device.tid}`
   }
 
-  async function handleToggle(device: Device) {
+  function handleToggle(device: Device) {
+    if (!device.enabled) {
+      updateDevice(device)
+      return
+    }
+
+    const branchName = branchMap[device.mid] ?? '未知分店'
+
+    confirm.require({
+      header: '確認停用設備',
+      message: `確定要停用「${branchName}」的設備 ${device.tid} 嗎？`,
+      icon: 'pi pi-exclamation-triangle',
+      rejectLabel: '取消',
+      acceptLabel: '確認停用',
+      rejectProps: {
+        severity: 'secondary',
+        outlined: true,
+      },
+      acceptProps: {
+        severity: 'danger',
+      },
+      accept: () => updateDevice(device),
+    })
+  }
+
+  async function updateDevice(device: Device) {
     updatingDevice.value = `${device.mid}:${device.tid}`
 
     try {
