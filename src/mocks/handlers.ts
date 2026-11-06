@@ -4,15 +4,13 @@ import branches from '@/data/branches.json'
 import transactions from '@/data/transactions.json'
 import devices from '@/data/devices.json'
 import type { Device } from '@/services/devices'
-import type {
-  DashboardComparison,
-  DashboardInsight,
-  DashboardSummary,
-} from '@/services/dashboard'
+import type { DashboardComparison, DashboardInsight, DashboardSummary } from '@/services/dashboard'
 
 const STORAGE_KEY = 'retail-lab-devices'
 
-function createDashboardSummary(items: Array<{ amount: number; status: string }>): DashboardSummary {
+function createDashboardSummary(
+  items: Array<{ amount: number; status: string }>,
+): DashboardSummary {
   const successful = items.filter(function (transaction) {
     return transaction.status === 'success'
   })
@@ -131,9 +129,7 @@ function createDashboardInsights(
       severity: gap >= 3 ? 'warn' : 'info',
       title: `${lowestBranch.name}成功率最低，為 ${lowestBranch.successRate.toFixed(1)}%`,
       description:
-        gap > 0
-          ? `低於整體成功率 ${gap.toFixed(1)} 個百分點。`
-          : '各分店成功率表現接近整體水準。',
+        gap > 0 ? `低於整體成功率 ${gap.toFixed(1)} 個百分點。` : '各分店成功率表現接近整體水準。',
       action: {
         label: '查看分店失敗交易',
         query: {
@@ -305,10 +301,7 @@ export const handlers = [
       successRateChangePoints: Number(
         (summary.successRate - previousSummary.successRate).toFixed(1),
       ),
-      averageAmountChangeRate: getChangeRate(
-        summary.averageAmount,
-        previousSummary.averageAmount,
-      ),
+      averageAmountChangeRate: getChangeRate(summary.averageAmount, previousSummary.averageAmount),
     }
 
     const dailyMap = new Map<string, number>()
